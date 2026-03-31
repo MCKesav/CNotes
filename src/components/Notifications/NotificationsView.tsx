@@ -1,4 +1,4 @@
-import { Bell, FileText, Share2, AlertCircle } from 'lucide-react';
+import { Bell, FileText, Share2, AlertCircle, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useStore } from '../../store/useStore';
 import { Note } from '../../types';
@@ -8,7 +8,7 @@ interface NotificationsViewProps {
 }
 
 export default function NotificationsView({ onSelectNote }: NotificationsViewProps) {
-  const { getUserNotifications, markNotificationRead, getNote } = useStore();
+  const { getUserNotifications, markNotificationRead, clearNotifications, getNote } = useStore();
   const notifications = getUserNotifications();
 
   const getIcon = (type: string) => {
@@ -56,11 +56,23 @@ export default function NotificationsView({ onSelectNote }: NotificationsViewPro
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-[#e0e1dd]">Notifications</h2>
-          {unreadNotifications.length > 0 && (
-            <span className="px-3 py-1 bg-[#415a77] text-[#e0e1dd] text-sm rounded-full">
-              {unreadNotifications.length} unread
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {unreadNotifications.length > 0 && (
+              <span className="px-3 py-1 bg-[#415a77] text-[#e0e1dd] text-sm rounded-full">
+                {unreadNotifications.length} unread
+              </span>
+            )}
+            {notifications.length > 0 && (
+              <button
+                onClick={clearNotifications}
+                className="flex items-center gap-1.5 px-3 py-1 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                title="Clear all notifications"
+              >
+                <Trash2 className="w-4 h-4" />
+                Clear
+              </button>
+            )}
+          </div>
         </div>
 
         {unreadNotifications.length > 0 && (

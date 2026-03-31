@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Users, Search, Trash2, Shield, User, Mail, Calendar, FileText, FolderOpen } from 'lucide-react';
+import { Users, Search, Trash2, Shield, ShieldOff, User, Mail, Calendar, FileText, FolderOpen } from 'lucide-react';
 import { format } from 'date-fns';
 import { useStore } from '../../store/useStore';
 
 export default function ManageUsers() {
-  const { getAllUsers, deleteUser, notes, folders, currentUser } = useStore();
+  const { getAllUsers, deleteUser, toggleUserRole, notes, folders, currentUser } = useStore();
   const allUsers = getAllUsers();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -128,14 +128,26 @@ export default function ManageUsers() {
                 </div>
               </div>
               
-              {selectedUser.id !== currentUser?.id && selectedUser.role !== 'admin' && (
-                <button
-                  onClick={() => handleDeleteUser(selectedUser.id)}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  Delete User
-                </button>
+              {selectedUser.id !== currentUser?.id && (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => toggleUserRole(selectedUser.id)}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#415a77]/30 hover:bg-[#415a77]/50 text-[#e0e1dd] rounded-lg transition-colors"
+                    title={selectedUser.role === 'admin' ? 'Remove admin role' : 'Make admin'}
+                  >
+                    {selectedUser.role === 'admin' ? <ShieldOff className="w-4 h-4" /> : <Shield className="w-4 h-4" />}
+                    {selectedUser.role === 'admin' ? 'Remove Admin' : 'Make Admin'}
+                  </button>
+                  {selectedUser.role !== 'admin' && (
+                    <button
+                      onClick={() => handleDeleteUser(selectedUser.id)}
+                      className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Delete User
+                    </button>
+                  )}
+                </div>
               )}
             </div>
 

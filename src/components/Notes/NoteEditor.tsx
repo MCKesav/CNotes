@@ -163,6 +163,11 @@ export default function NoteEditor({ note, onClose, isNew = false }: NoteEditorP
     const file = e.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith('image/')) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image must be under 5 MB');
+      e.target.value = '';
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (ev) => {
       const dataUrl = ev.target?.result as string;

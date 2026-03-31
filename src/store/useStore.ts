@@ -55,7 +55,11 @@ interface AppState {
   // Notification actions
   addNotification: (userId: string, message: string, type: 'share' | 'edit' | 'system', noteId?: string) => void;
   markNotificationRead: (notificationId: string) => void;
+  clearNotifications: () => void;
   getUserNotifications: () => Notification[];
+  
+  // Admin actions
+  toggleUserRole: (userId: string) => void;
   
   // Activity logging
   logActivity: (action: string, details?: string) => void;
@@ -398,6 +402,27 @@ export const useStore = create<AppState>()(
             n.id === notificationId ? { ...n, read: true } : n
           )
         }));
+      },
+
+      clearNotifications: () => {
+        const { currentUser } = get();
+        if (!currentUser) return;
+        set(state => ({
+          notifications: state.notifications.filter(n => n.userId !== currentUser.id)
+        }));
+      },
+
+      toggleUserRole: (userId) => {
+        const { currentUser, users } = get();
+        if (!currentUser || currentUser.role !== 'admin') return;
+        if (userId === currentUser.id) return; // can't change own role
+        const target = users.find(u => u.id === userId);
+        if (!target) return;
+        const newRole = target.role === 'admin' ? 'user' : 'admin';
+        set(state => ({
+          users: state.users.map(u => u.id === userId ? { ...u, role: newRole } : u)
+        }));
+        get().logActivity('Role changed', `${target.name} → ${newRole}`);
       },
 
       getUserNotifications: () => {

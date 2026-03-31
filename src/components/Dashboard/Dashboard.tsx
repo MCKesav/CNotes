@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Sidebar from '../Layout/Sidebar';
 import NoteList from '../Notes/NoteList';
 import NoteEditor from '../Notes/NoteEditor';
@@ -19,6 +19,26 @@ export default function Dashboard() {
   const selectedNote = selectedNoteId ? getNote(selectedNoteId) : null;
   const folders = getUserFolders();
   const currentFolder = selectedFolderId ? folders.find(f => f.id === selectedFolderId) : null;
+
+  // Ctrl/Cmd+K to open search
+  const handleKeyboardShortcut = useCallback((e: KeyboardEvent) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      setActiveView('search');
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyboardShortcut);
+    return () => window.removeEventListener('keydown', handleKeyboardShortcut);
+  }, [handleKeyboardShortcut]);
+
+  // Auto-close editor if the selected note was deleted
+  useEffect(() => {
+    if (selectedNoteId && !selectedNote && !isCreatingNote) {
+      setSelectedNote(null);
+    }
+  }, [selectedNoteId, selectedNote, isCreatingNote, setSelectedNote]);
 
   const handleSelectNote = (note: Note) => {
     setSelectedNote(note.id);
