@@ -9,6 +9,7 @@ import MonitorSystem from '../Admin/MonitorSystem';
 import CreateFolderModal from '../Modals/CreateFolderModal';
 import { useStore } from '../../store/useStore';
 import { Note } from '../../types';
+import GradientText from '../UI/GradientText';
 
 export default function Dashboard() {
   const { setSelectedNote, selectedNoteId, getNote, selectedFolderId, getUserFolders } = useStore();
@@ -100,7 +101,15 @@ export default function Dashboard() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-semibold text-[#e0e1dd] mb-3">Select or Create a Note</h3>
+                  <h3 className="text-2xl font-semibold text-[#e0e1dd] mb-3">
+                    <GradientText
+                      colors={['#415a77', '#778da9', '#e0e1dd', '#778da9', '#415a77']}
+                      animationSpeed={5}
+                      className="text-2xl font-semibold"
+                    >
+                      Select or Create a Note
+                    </GradientText>
+                  </h3>
                   <p className="text-[#778da9] max-w-md mb-6">
                     Choose a note from the list to view and edit, or create a new one to get started.
                   </p>

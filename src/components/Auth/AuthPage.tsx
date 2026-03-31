@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
+import SpotlightCard from '../UI/SpotlightCard';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -12,13 +13,16 @@ export default function AuthPage() {
         <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-[#1b263b]/30 to-transparent rounded-full blur-3xl" />
       </div>
       
-      <div className="relative z-10 w-full max-w-md p-8 bg-[#0d1b2a]/80 backdrop-blur-xl rounded-2xl border border-[#415a77]/30 shadow-2xl">
+      <SpotlightCard
+        spotlightColor="rgba(65, 90, 119, 0.3)"
+        className="relative z-10 w-full max-w-md p-8 bg-[#0d1b2a]/80 backdrop-blur-xl rounded-2xl border border-[#415a77]/30 shadow-2xl"
+      >
         {isLogin ? (
           <LoginForm onSwitchToRegister={() => setIsLogin(false)} />
         ) : (
           <RegisterForm onSwitchToLogin={() => setIsLogin(true)} />
         )}
-      </div>
+      </SpotlightCard>
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Mail, Lock, LogIn, AlertCircle } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import GradientText from '../UI/GradientText';
+import BlurText from '../UI/BlurText';
 
 interface LoginFormProps {
   onSwitchToRegister: () => void;
@@ -36,8 +38,24 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>
-        <h1 className="text-3xl font-bold text-[#e0e1dd]">CNotes</h1>
-        <p className="text-[#778da9] mt-2">Sign in to access your notes</p>
+        <h1 className="text-3xl font-bold text-[#e0e1dd]">
+          <GradientText
+            colors={['#415a77', '#778da9', '#e0e1dd', '#778da9', '#415a77']}
+            animationSpeed={6}
+            className="text-3xl font-bold"
+          >
+            CNotes
+          </GradientText>
+        </h1>
+        <p className="text-[#778da9] mt-2">
+          <BlurText
+            text="Sign in to access your notes"
+            delay={75}
+            animateBy="words"
+            direction="top"
+            className="text-[#778da9] justify-center"
+          />
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">

@@ -3,6 +3,7 @@ import { FileText, Pin, Users, MoreVertical, Trash2, FolderOpen } from 'lucide-r
 import { useState } from 'react';
 import { useStore } from '../../store/useStore';
 import { Note } from '../../types';
+import SpotlightCard from '../UI/SpotlightCard';
 
 interface NoteListProps {
   onSelectNote: (note: Note) => void;
@@ -52,15 +53,19 @@ export default function NoteList({ onSelectNote }: NoteListProps) {
           const folderName = getFolderName(note.folderId);
           
           return (
-            <div
+            <SpotlightCard
               key={note.id}
-              onClick={() => onSelectNote(note)}
-              className={`relative p-4 rounded-xl cursor-pointer transition-all group ${
+              spotlightColor={isSelected ? 'rgba(119, 141, 169, 0.35)' : 'rgba(65, 90, 119, 0.25)'}
+              className={`rounded-xl cursor-pointer transition-all group ${
                 isSelected
                   ? 'bg-[#415a77] shadow-lg shadow-[#415a77]/20'
                   : 'bg-[#1b263b] hover:bg-[#1b263b]/80 border border-[#415a77]/20 hover:border-[#415a77]/40'
               }`}
             >
+              <div
+                onClick={() => onSelectNote(note)}
+                className="relative p-4"
+              >
               {/* Top row */}
               <div className="flex items-start justify-between gap-2 mb-2">
                 <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -165,7 +170,8 @@ export default function NoteList({ onSelectNote }: NoteListProps) {
                 className="absolute left-0 top-4 bottom-4 w-1 rounded-r"
                 style={{ backgroundColor: note.color }}
               />
-            </div>
+              </div>
+            </SpotlightCard>
           );
         })}
       </div>

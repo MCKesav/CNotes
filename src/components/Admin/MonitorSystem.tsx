@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useStore } from '../../store/useStore';
+import SpotlightCard from '../UI/SpotlightCard';
 
 export default function MonitorSystem() {
   const { getAllUsers, notes, folders, activityLogs } = useStore();
@@ -34,7 +35,7 @@ export default function MonitorSystem() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-4 gap-4 mb-8">
-          <div className="p-5 bg-gradient-to-br from-[#415a77]/30 to-[#1b263b] rounded-xl border border-[#415a77]/30">
+          <SpotlightCard spotlightColor="rgba(65, 90, 119, 0.4)" className="p-5 bg-gradient-to-br from-[#415a77]/30 to-[#1b263b] rounded-xl border border-[#415a77]/30">
             <div className="flex items-center justify-between mb-3">
               <Users className="w-8 h-8 text-[#415a77]" />
               <span className="text-xs px-2 py-1 bg-[#415a77]/30 text-[#778da9] rounded-full">
@@ -43,9 +44,9 @@ export default function MonitorSystem() {
             </div>
             <p className="text-3xl font-bold text-[#e0e1dd]">{stats.totalUsers}</p>
             <p className="text-sm text-[#778da9]">Total Users</p>
-          </div>
+          </SpotlightCard>
 
-          <div className="p-5 bg-gradient-to-br from-[#778da9]/30 to-[#1b263b] rounded-xl border border-[#778da9]/30">
+          <SpotlightCard spotlightColor="rgba(119, 141, 169, 0.4)" className="p-5 bg-gradient-to-br from-[#778da9]/30 to-[#1b263b] rounded-xl border border-[#778da9]/30">
             <div className="flex items-center justify-between mb-3">
               <FileText className="w-8 h-8 text-[#778da9]" />
               <span className="text-xs px-2 py-1 bg-[#778da9]/30 text-[#778da9] rounded-full">
@@ -54,23 +55,23 @@ export default function MonitorSystem() {
             </div>
             <p className="text-3xl font-bold text-[#e0e1dd]">{stats.totalNotes}</p>
             <p className="text-sm text-[#778da9]">Total Notes</p>
-          </div>
+          </SpotlightCard>
 
-          <div className="p-5 bg-gradient-to-br from-[#1b263b]/50 to-[#0d1b2a] rounded-xl border border-[#415a77]/30">
+          <SpotlightCard spotlightColor="rgba(224, 225, 221, 0.2)" className="p-5 bg-gradient-to-br from-[#1b263b]/50 to-[#0d1b2a] rounded-xl border border-[#415a77]/30">
             <div className="flex items-center justify-between mb-3">
               <FolderOpen className="w-8 h-8 text-[#e0e1dd]/50" />
             </div>
             <p className="text-3xl font-bold text-[#e0e1dd]">{stats.totalFolders}</p>
             <p className="text-sm text-[#778da9]">Total Folders</p>
-          </div>
+          </SpotlightCard>
 
-          <div className="p-5 bg-gradient-to-br from-blue-500/20 to-[#1b263b] rounded-xl border border-blue-500/30">
+          <SpotlightCard spotlightColor="rgba(59, 130, 246, 0.35)" className="p-5 bg-gradient-to-br from-blue-500/20 to-[#1b263b] rounded-xl border border-blue-500/30">
             <div className="flex items-center justify-between mb-3">
               <TrendingUp className="w-8 h-8 text-blue-400" />
             </div>
             <p className="text-3xl font-bold text-[#e0e1dd]">{stats.sharedNotes}</p>
             <p className="text-sm text-[#778da9]">Shared Notes</p>
-          </div>
+          </SpotlightCard>
         </div>
 
         {/* System Status */}
