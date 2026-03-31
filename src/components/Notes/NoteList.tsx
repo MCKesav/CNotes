@@ -21,7 +21,11 @@ export default function NoteList({ onSelectNote }: NoteListProps) {
   };
 
   const truncateContent = (content: string, maxLength: number = 100) => {
-    const plainText = content.replace(/[#*`\[\]]/g, '').trim();
+    // Create a temporary element to strip HTML tags
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
+    const plainText = tempDiv.textContent || tempDiv.innerText || '';
+    
     if (plainText.length <= maxLength) return plainText;
     return plainText.slice(0, maxLength) + '...';
   };

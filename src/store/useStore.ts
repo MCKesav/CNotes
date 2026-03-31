@@ -72,7 +72,7 @@ const defaultAdmin: User = {
   email: 'admin@cnotes.com',
   password: 'admin123',
   role: 'admin',
-  createdAt: new Date(),
+  createdAt: new Date('2024-01-01T00:00:00.000Z'),
   avatar: undefined
 };
 
@@ -82,7 +82,7 @@ const demoUser: User = {
   email: 'kesav@example.com',
   password: 'password123',
   role: 'user',
-  createdAt: new Date(),
+  createdAt: new Date('2024-01-01T00:00:00.000Z'),
   avatar: undefined
 };
 
@@ -172,6 +172,7 @@ export const useStore = create<AppState>()(
         const { users } = get();
         const user = users.find(u => u.email === email && u.password === password);
         if (user) {
+          // Always sync currentUser from the users array so any admin updates are reflected
           set({ currentUser: user, isAuthenticated: true });
           get().logActivity('User logged in', email);
           return true;
@@ -186,10 +187,13 @@ export const useStore = create<AppState>()(
 
       // User actions
       updateUser: (userId, updates) => {
-        set(state => ({
-          users: state.users.map(u => u.id === userId ? { ...u, ...updates } : u),
-          currentUser: state.currentUser?.id === userId ? { ...state.currentUser, ...updates } : state.currentUser
-        }));
+        set(state => {
+          const updatedUsers = state.users.map(u => u.id === userId ? { ...u, ...updates } : u);
+          const updatedCurrentUser = state.currentUser?.id === userId
+            ? updatedUsers.find(u => u.id === userId) ?? state.currentUser
+            : state.currentUser;
+          return { users: updatedUsers, currentUser: updatedCurrentUser };
+        });
       },
 
       deleteUser: (userId) => {
@@ -427,12 +431,30 @@ export const useStore = create<AppState>()(
     {
       name: 'cnotes-storage',
       partialize: (state) => ({
+        currentUser: state.currentUser,
+        isAuthenticated: state.isAuthenticated,
         users: state.users,
         notes: state.notes,
         folders: state.folders,
         notifications: state.notifications,
         activityLogs: state.activityLogs,
       }),
+      // After rehydrating from localStorage, ensure currentUser is synced from
+      // the users array so any updates (role changes, deletes) are reflected.
+      onRehydrateStorage: () => (rehydratedState) => {
+        if (!rehydratedState) return;
+        const { currentUser, users, isAuthenticated } = rehydratedState;
+        if (isAuthenticated && currentUser) {
+          const fresh = users.find(u => u.id === currentUser.id);
+          if (fresh) {
+            rehydratedState.currentUser = fresh;
+          } else {
+            // User was deleted — force logout
+            rehydratedState.currentUser = null;
+            rehydratedState.isAuthenticated = false;
+          }
+        }
+      },
     }
   )
 );
